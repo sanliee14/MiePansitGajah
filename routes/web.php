@@ -6,10 +6,12 @@ use App\Http\Controllers\KasirController;
 use App\Http\Controllers\OwnerController;
 
 Route::get('/', function () {
-    // return view('welcome');
     return view('customer.home');
-    // return view('customer.order');
 });
+
+Route::get('/kasir/login', function () {
+    return view('kasir.login');
+})->name('kasir.loginForm');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin', function () {
@@ -36,8 +38,11 @@ Route::POST('/customer/proses', [CustomerController::class, 'proses'])->name('cu
 
 
 // Kasir
-Route::get('/kasir/dashboard', [KasirController::class, 'dashboard'])->name('kasir.dashboard');
-Route::get('/kasir/transaksi', [KasirController::class, 'transaksi'])->name('kasir.transaksi');
+Route::post('/kasir/login', [KasirController::class, 'login'])->name('kasir.login');
+Route::get('/kasir/menu', [KasirController::class, 'menu'])->name('kasir.menu');
+Route::get('/kasir/accpesanan', [KasirController::class, 'accpesanan'])->name('kasir.accpesanan');
+Route::get('/kasir/prosespesanan', [KasirController::class, 'prosespesanan'])->name('kasir.prosespesanan');
+Route::get('/kasir/history', [KasirController::class, 'history'])->name('kasir.history');
 
 // Owner
 Route::get('/owner/dashboard', [OwnerController::class, 'dashboard'])->name('owner.dashboard');
