@@ -23,8 +23,8 @@
         </h1>
 
         <!-- form username & passowrd -->
-        <form action="{{ route('kasir.menu') }}" method="POST" class="space-y-4">
-            @csrf
+        <form action="{{ route('kasir.dashboard') }}" method="GET" class="space-y-4">
+            
             <input type="text" name="username" placeholder="Username"
                 class="w-full px-4 py-3 rounded-xl bg-white/30 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
             

@@ -12,13 +12,13 @@
 <body class="bg-gradient-to-b from-blue-100 via-blue-200 to-white min-h-screen flex flex-col text-gray-800">
 
   <!-- Navbar -->
-  <nav class="bg-blue-500 text-white flex justify-between items-center px-6 py-3 shadow-lg">
-    <div class="flex items-center space-x-3">
-      <div class="relative w-10 h-10">
-        <div class="absolute inset-0 bg-blue-400 blur-xl opacity-40 rounded-full"></div>
+<nav class="bg-blue-500 text-white flex justify-between items-center px-6 py-3 shadow-lg">
+  <div class="flex items-center space-x-3">
+    <div class="relative w-10 h-10">
+      <div class="absolute inset-0 bg-blue-400 blur-xl opacity-40 rounded-full"></div>
         <img src="{{ asset('image/fix.png') }}" alt="Logo" class="relative w-10 h-10 rounded-full ring-2 ring-white/70">
-      </div>
-      <h1 class="text-xl font-bold uppercase tracking-wide">Mie Pansit Gajah Siantar</h1>
+    </div>
+    <h1 class="text-xl font-bold uppercase tracking-wide">Mie Pansit Gajah Siantar</h1>
     </div>
     <button class="bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition-all duration-200">
       Logout

@@ -38,13 +38,18 @@ Route::POST('/customer/proses', [CustomerController::class, 'proses'])->name('cu
 
 
 // Kasir
-Route::post('/kasir/login', [KasirController::class, 'login'])->name('kasir.login');
+Route::get('/kasir/login', [KasirController::class, 'login'])->name('kasir.login');
+Route::get('/kasir/dashboard', [KasirController::class, 'dashboardkasir'])->name('kasir.dashboard');
 Route::get('/kasir/menu', [KasirController::class, 'menu'])->name('kasir.menu');
 Route::get('/kasir/accpesanan', [KasirController::class, 'accpesanan'])->name('kasir.accpesanan');
+Route::get('/kasir/payment', [KasirController::class, 'payment'])->name('kasir.payment');
+Route::get('/kasir/detailpesanan', [KasirController::class, 'detailpesanan'])->name('kasir.detailpesanan');
 Route::get('/kasir/prosespesanan', [KasirController::class, 'prosespesanan'])->name('kasir.prosespesanan');
+Route::get('/kasir/detailproses', [KasirController::class, 'detailproses'])->name('kasir.detailproses');
 Route::get('/kasir/history', [KasirController::class, 'history'])->name('kasir.history');
 
 // Owner
+Route::get('/owner/login', [OwnerController::class, 'login'])->name('owner.login');
 Route::get('/owner/dashboard', [OwnerController::class, 'dashboard'])->name('owner.dashboard');
 Route::get('/owner/product', [OwnerController::class, 'product'])->name('owner.product');
 Route::get('/owner/tambahproduct', [OwnerController::class, 'tambahproduct'])->name('owner.tambahproduct');

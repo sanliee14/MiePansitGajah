@@ -115,7 +115,7 @@
 
         <!-- Tombol Tambah -->
         <div class="mt-4 pt-4 border-t">
-          <a href="{{ url('/customer/menu') }}"
+          <a href="{{ url('/customer/order') }}"
              class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600">
             + Tambah Pesanan
           </a>
