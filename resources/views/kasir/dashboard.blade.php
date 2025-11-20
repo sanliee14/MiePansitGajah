@@ -23,68 +23,88 @@
     </nav>
     </header>
 
+   <nav class="fixed top-1/2 -translate-y-1/2 pl-8">
+    <div class="bg-blue-100/70 backdrop-blur-md p-4 px-6 rounded-3xl shadow-lg flex flex-col gap-6 justify-center items-center w-fit">
+
+        <a href="{{ url('/kasir/dashboard') }}"
+            class="w-16 h-16 bg-[#3C82F6] rounded-full shadow flex items-center justify-center hover:scale-105 transition">
+            <img src="/image/icon1.png" class="w-8">
+        </a>
+
+        <a href="{{ url('/kasir/accpesanan') }}"
+            class="w-16 h-16 bg-[#3C82F6] rounded-full shadow flex items-center justify-center hover:scale-105 transition">
+            <img src="/image/icon2.png" class="w-8">
+        </a>
+
+        <a href="{{ url('/kasir/prosespesanan') }}"
+            class="w-16 h-16 bg-[#3C82F6] rounded-full shadow flex items-center justify-center hover:scale-105 transition">
+            <img src="/image/icon2.png" class="w-8">
+        </a>
+
+        <a href="{{ url('/kasir/history') }}"
+            class="w-16 h-16 bg-[#3C82F6] rounded-full shadow flex items-center justify-center hover:scale-105 transition">
+            <img src="/image/icon3.png" class="w-7">
+        </a>
+    </div>
+</nav>
+
+
+
     <!-- MENU CONTENT -->
-    <main class="px-6 mt-6 pb-28">
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
-
-            <!-- CARD MENU (STATIC 8 ITEM) -->
+    <main class="flex mt-6 px-8 justify-center gap-8 pb-32"> 
+        <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 max-w-6xl">
             @for ($i = 0; $i < 8; $i++)
-            <div class="bg-white rounded-2xl shadow hover:shadow-lg p-3 transition hover:scale-105 text-center">
-                <img src="{{ asset('image/4.jpeg') }}" class="w-full h-32 object-cover rounded-xl mb-2">
-                <h3 class="font-semibold text-gray-800 text-sm">Mie Pansit</h3>
+            <div class="backdrop-blur-xl bg-white rounded-2xl p-3 shadow hover:shadow-blue-200 hover:scale-105 transition text-center">
+                <img src="{{ asset('image/4.jpeg') }}" class="w-full h-36 object-cover rounded-xl mb-2">
+                <h2 class="font-semibold text-gray-800 text-sm">Mie Pansit</h2>
                 <p class="text-gray-500 text-xs mb-2">Rp25.000</p>
-
-                <button class="w-full bg-blue-500 text-white text-sm py-1.5 rounded-full hover:bg-blue-400 transition">
-                    Pesan
+                <button data-price="25000" class="add-to-cart w-full bg-blue-500 text-white text-sm py-1.5 rounded-lg hover:bg-blue-400 transition">
+                    <i class="fas fa-cart-plus mr-1"></i>Pesan
                 </button>
             </div>
             @endfor
-        </div>
-        
-        <!-- TOMBOL MENUJU HALAMAN PAYMENT -->
-    <div class="fixed bottom-20 left-0 w-full px-6">
-    <a href="{{ route('kasir.payment') }}">
-        <button class="w-full bg-green-500 text-white font-bold py-3 rounded-2xl shadow-lg hover:bg-green-400 transition">
-            Lanjut ke Payment
-        </button>
-    </a>
-    </div>
-
+        </section>
     </main>
 
-    <!-- nav bawah -->
-    <nav class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-md shadow-[0_-4px_10px_rgba(0,0,0,0.1)] py-3 px-8 flex justify-around items-center z-50">
+    <div class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md shadow-[0_-4px_10px_rgba(0,0,0,0.1)] px-6 py-3 flex items-center justify-between z-40">
+        <div class="flex items-center gap-4">
+            <!-- Icon Cart + Jumlah -->
+            <div class="relative">
+                <i class="fas fa-shopping-cart text-2xl text-blue-600"></i>
+                <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-1.5 rounded-full">0</span>
+            </div>
+            <!-- Total -->
+            <div>
+                <p class="text-gray-600 text-xs leading-tight">Total</p>
+                <p id="cart-total" class="text-lg font-bold text-gray-800">Rp0</p>
+            </div>
+        </div>
 
-        <!-- menu -->
-        <a href="{{ route('kasir.dashboard') }}"
-        class="flex flex-col items-center text-blue-600 hover:text-white hover:bg-blue-500 transition rounded-full w-16 h-16 bg-white shadow-md justify-center">
-            <i class="fas fa-utensils text-xl"></i>
-            <span class="text-xs font-semibold mt-1">Menu</span>
+        <!-- Tombol Checkout -->
+        <a href="{{ route('customer.checkout') }}" 
+        class="bg-blue-500 hover:bg-blue-400 text-white font-semibold px-6 py-2 rounded-full shadow transition">
+        Checkout
         </a>
 
-        <!-- acc pesanan -->
-        <a href="{{ route('kasir.accpesanan') }}"
-        class="flex flex-col items-center text-blue-600 hover:text-white hover:bg-blue-500 transition rounded-full w-16 h-16 bg-white shadow-md justify-center">
-            <i class="fas fa-check-circle text-xl"></i>
-            <span class="text-xs font-semibold mt-1">Acc</span>
-        </a>
-
-        <!-- diproses -->
-        <a href="{{ route('kasir.prosespesanan') }}"
-        class="flex flex-col items-center text-blue-600 hover:text-white hover:bg-blue-500 transition rounded-full w-16 h-16 bg-white shadow-md justify-center">
-            <i class="fas fa-hourglass-half text-xl"></i>
-            <span class="text-xs font-semibold mt-1">Proses</span>
-        </a>
-
-        <!-- history -->
-        <a href="{{ route('kasir.history') }}"
-        class="flex flex-col items-center text-blue-600 hover:text-white hover:bg-blue-500 transition rounded-full w-16 h-16 bg-white shadow-md justify-center">
-            <i class="fas fa-history text-xl"></i>
-            <span class="text-xs font-semibold mt-1">History</span>
-        </a>
-    </nav>
-
-    <!-- ICON KIT -->
+    <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/a2e0a6c5f6.js" crossorigin="anonymous"></script>
 
+    <!-- Script Keranjang -->
+    <script>
+        let cartCount = 0;
+        let cartTotal = 0;
+
+        document.querySelectorAll('.add-to-cart').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const price = parseInt(btn.dataset.price);
+                cartCount++;
+                cartTotal += price;
+
+                document.getElementById('cart-count').innerText = cartCount;
+                document.getElementById('cart-total').innerText = 'Rp' + cartTotal.toLocaleString('id-ID');
+            });
+        });
+    </script>
 </body>
+</html>
+
