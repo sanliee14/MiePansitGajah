@@ -24,12 +24,12 @@
 </header>
 <!-- CONTENT -->
 <main class="flex-1 overflow-y-auto px-5 py-4 space-y-4">
-
+<div class="max-w-3xl mx-auto px-4 py-6">
     @foreach ($cart as $item)
-    <div class="bg-white rounded-2xl p-4 flex items-center justify-between shadow-sm">
+    <div class="bg-white mb-4 rounded-2xl p-4 flex items-center justify-between shadow-sm">
 
         <!-- Produk -->
-        <div class="flex items-center gap-3">
+        <div class="flex items-center mb-4 gap-3">
 
             <!-- Gambar -->
             <img src="{{ asset('product/' . DB::table('product')->where('Id_Product', $item['product_id'])->value('Image')) }}"
@@ -57,12 +57,13 @@
     <!-- DETAIL PESANAN -->
     <div class="bg-white rounded-2xl p-4 shadow-sm space-y-1 text-sm font-semibold">
         <p>Catatan Tambahan: {{ $payment->Catatan ?? '-' }}</p>
+        <p>Kasir : {{ $payment->NamaKasir ?? 'Pesanan akan segera diproses oleh kasir' }}</p>
         <p>Metode Pembayaran: {{ ucfirst($payment->Metode) }}</p>
         <p>Waktu Pemesanan: {{ $payment->Waktu_Bayar }}</p>
         <p>Nomor Pesanan: #{{ $payment->Id_Cart }}</p>
         <p>Total Pesanan: Rp{{ number_format($payment->Jumlah_Bayar,0,',','.') }}</p>
     </div>
-
+</div>
 </main>
 
 <!-- FOOTER -->

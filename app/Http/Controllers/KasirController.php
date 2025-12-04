@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class KasirController extends Controller
 {
@@ -14,24 +16,31 @@ class KasirController extends Controller
 
     public function proseslogin(Request $request)
     {
-        $request->validate([
+    // Validasi input
+    $request->validate([
         'username' => 'required',
         'password' => 'required'
     ]);
 
-    // cek kombinasi username, password, dan role kasir
-    $credentials = [
-        'Username' => $request->username,
-        'Password' => $request->password,
-        'Role' => 'kasir'
-    ];
+    // Cek user berdasarkan username (atau email, sesuai database kamu)
+    $user = DB::table('user')
+        ->where('Username', $request->username)
+        ->first();
 
-    if (Auth::attempt($credentials)) {
-        $request->session()->regenerate();
-        return redirect()->route('kasir.dashboard');
+    if (!$user) {
+        return back()->with('error', 'Username tidak ditemukan.');
     }
 
-    return back()->with('error', 'Username atau password salah!');
+    // Cek password (pastikan password di DB sudah di-hash!)
+    if (!Hash::check($request->password, $user->Password)) {
+        return back()->with('error', 'Password salah.');
+    }
+
+    // LOGIN MANUAL (karena pakai table kasir, bukan users)
+    auth()->loginUsingId($user->Id_Kasir);
+
+    return redirect()->route('kasir.dashboard')
+    ->with('success', 'Berhasil login.');
     }
 
     public function dashboardkasir()
@@ -216,27 +225,34 @@ class KasirController extends Controller
     return view('kasir.detailproses', compact('cart', 'detail'));
     }
 
-    public function selesai($id)
-    {
+ public function selesai($id)
+{
+    // Ambil ID user kasir yang sedang login
+    $idkasir = auth()->user()->Id_User;
+
     // Update status cart
     DB::table('cart')
         ->where('Id_Cart', $id)
         ->update([
             'Status' => 'selesai',
+            'updated_at' => now()
         ]);
 
-    // Update payment jika mau
+    // Update payment
     DB::table('payment')
         ->where('Id_Cart', $id)
         ->update([
-            'Status' => 'selesai'
+            'Status' => 'selesai',
+            'Id_Kasir' => $idkasir, // simpan kasir yang ACC
+            'updated_at' => now()
         ]);
 
-    return redirect()->route('kasir.prosespesanan')->with('success', 'Pesanan telah selesai.');
-    }
+    return redirect()->route('kasir.prosespesanan')
+        ->with('success', 'Pesanan telah selesai.');
+}
 
     public function history(Request $request)
-{
+    {
     $tanggal = $request->tanggal;
 
     $order = DB::table('cart')
@@ -262,9 +278,9 @@ class KasirController extends Controller
 
     public function detailhistory($id)
     {
-    // Ambil info utama cart + payment
     $cart = DB::table('cart')
         ->join('payment', 'cart.Id_Cart', '=', 'payment.Id_Cart')
+        ->leftJoin('user', 'payment.Id_Kasir', '=', 'user.Id_User')
         ->select(
             'cart.Id_Cart',
             'cart.Nama',
@@ -273,10 +289,17 @@ class KasirController extends Controller
             'cart.Status',
             'payment.Jumlah_Bayar',
             'payment.Metode',
-            'payment.Waktu_Bayar'
+            'payment.Waktu_Bayar',
+            'payment.Id_Kasir',
+            'users.Name as NamaKasir'
         )
         ->where('cart.Id_Cart', $id)
         ->first();
+
+    if (!$cart) {
+        return redirect()->route('kasir.history')
+            ->with('error', 'Data tidak ditemukan.');
+    }
 
     if (!$cart) {
         return redirect()->route('kasir.history')->with('error', 'Data tidak ditemukan.');

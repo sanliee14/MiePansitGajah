@@ -25,9 +25,9 @@
 
     <!-- Konten Pesanan -->
     <main class="flex-1 overflow-y-auto px-5 py-4 space-y-4">
-
+    <div class="max-w-3xl mx-auto px-4 py-6">
         @foreach ($cart as $c)
-        <nav class="bg-white rounded-2xl p-4 relative" id="item-{{ $c['product_id'] }}">
+        <nav class="bg-white mb-4 rounded-2xl p-4 relative" id="item-{{ $c['product_id'] }}">
         <div>
             <a href="{{ route('customer.menu') }}"
             class="absolute top-3 right-4 text-sm font-semibold text-blue-800 hover:text-blue-600">
@@ -64,11 +64,14 @@
         @endforeach
 
         <!-- Catatan -->
-        <div class="bg-white rounded-2xl p-4">
-            <label class="block text-sm font-semibold mb-1">Catatan Tambahan</label>
-            <textarea id="catatan" class="w-full bg-blue-100 rounded-lg p-2 text-sm border-none focus:ring-2 focus:ring-blue-400" 
-                rows="2" placeholder="Contoh: tanpa sambal, bungkus terpisah..."></textarea>
-        </div>
+        <div class="bg-white mb-4 rounded-2xl p-4">
+    <label class="block text-sm font-semibold mb-1">Catatan Tambahan</label>
+    <textarea 
+        name="catatan" 
+        id="catatan"
+        class="w-full bg-blue-100 rounded-lg p-2 text-sm border-none focus:ring-2 focus:ring-blue-400"
+        placeholder="Contoh: tanpa sambal, bungkus terpisah..."></textarea>
+</div>
 
         <!-- Pembayaran -->
         <div class="bg-white rounded-2xl p-4 flex justify-between items-center font-semibold">
@@ -78,7 +81,7 @@
                 <option value="qris">Qris</option>
             </select>
         </div>
-
+</div>
     </main>
 
     <!-- Footer Total -->

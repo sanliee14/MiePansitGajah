@@ -49,8 +49,8 @@ Route::get('/customer/proses', [CustomerController::class, 'proses'])->name('cus
 
 
 // Kasir
-Route::post('/kasir/login', [KasirController::class, 'login'])->name('kasir.login');
-Route::get('/kasir/proseslogin', [KasirController::class, 'proseslogin'])->name('kasir.proseslogin');
+Route::get('/kasir/login', [KasirController::class, 'login'])->name('kasir.login');
+Route::post('/kasir/proseslogin', [KasirController::class, 'proseslogin'])->name('kasir.proseslogin');
 Route::get('/kasir/dashboard', [KasirController::class, 'dashboardkasir'])->name('kasir.dashboard');
 Route::get('/kasir/menu', [KasirController::class, 'menu'])->name('kasir.menu');
 Route::post('/kasir/tambahproduct', [KasirController::class, 'tambahproduct'])->name('kasir.tambahproduct');
@@ -87,7 +87,16 @@ Route::post('/owner/updateproduct/{id}', [OwnerController::class, 'updateproduct
 Route::delete('/owner/deleteproduct/{id}', [OwnerController::class, 'deleteproduct'])->name('owner.deleteproduct');
 
 Route::get('/owner/transaksi', [OwnerController::class, 'transaksi'])->name('owner.transaksi');
+Route::get('/owner/detailtransaksi/{id}', [OwnerController::class, 'detailtransaksi'])
+    ->name('owner.detailtransaksi');
+
+
 Route::get('/owner/laporan', [OwnerController::class, 'laporan'])->name('owner.laporan');
+Route::get('/owner/addkasir', [OwnerController::class, 'addkasir'])->name('owner.addkasir');
+Route::post('/owner/storekasir', [OwnerController::class, 'storekasir'])->name('owner.storekasir');
+
+Route::get('/owner/listkasir', [OwnerController::class, 'listkasir'])->name('owner.listkasir');
+Route::delete('/owner/deletekasir/{id}', [OwnerController::class, 'deletekasir'])->name('owner.deletekasir');
 
 Route::post('/owner/{id}/addproduct', [OwnerController::class, 'menu'])
     ->name('owner.addproduct.menu');

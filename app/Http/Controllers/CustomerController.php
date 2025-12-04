@@ -169,7 +169,7 @@ class CustomerController extends Controller
     }
 
     public function datacheckout(Request $request)
-{
+    {
     $request->validate([
         'nama' => 'required',
         'meja' => 'required',
@@ -181,7 +181,7 @@ class CustomerController extends Controller
     ]);
 
     return redirect()->route('customer.checkout');
-}
+    }   
 
     public function bayar(Request $request)
     {
@@ -216,7 +216,7 @@ class CustomerController extends Controller
         'Waktu_Bayar'     => now(),
         'Jumlah_Bayar'    => $total,
         'Status'          => 'Menunggu',
-        'Catatan'         => null,
+        'Catatan'         => $request->catatan,
         'Bukti_Pembayaran' => null,
     ]);
 
@@ -237,19 +237,39 @@ class CustomerController extends Controller
     return redirect()->route('customer.qris')->with('success', 'Silahkan lanjutkan pembayaran QRIS.');
     }
 
-    public function proses() 
-    {
+ public function proses() 
+{
     $cart = session('last_payment_cart', []);
-    // gunakan Id_Cart untuk query payment
-    $payment = DB::table('payment')->where('Id_Cart', session('last_payment_id'))->first();
+
+    $payment = DB::table('payment')
+        ->leftJoin('kasir', 'payment.Id_Kasir', '=', 'kasir.Id_Kasir')
+        ->select(
+            'payment.Catatan',
+            'payment.Metode',
+            'payment.Jumlah_Bayar',
+            'payment.Waktu_Bayar',
+            'payment.Id_Kasir',
+            'payment.Id_Cart',
+            'payment.Status',
+            'kasir.Nama_Kasir as NamaKasir'
+        )
+        ->where('payment.Id_Cart', session('last_payment_id'))
+        ->first();
+
     $nama = session('nama_customer', 'Customer');
     $meja = session('no_meja', '-');
 
     if (empty($cart) || !$payment) {
-        return redirect()->route('customer.checkout')->with('error', 'Tidak ada pesanan terbaru.');
+        return redirect()->route('customer.checkout')
+            ->with('error', 'Tidak ada pesanan terbaru.');
     }
 
-    return view('customer.proses', compact('cart', 'payment', 'nama', 'meja'));
+    return view('customer.proses', [
+        'cart' => $cart,
+        'payment' => $payment,
+        'nama' => $nama,
+        'meja' => $meja
+    ]);
     }
 
     public function bukti(Request $request)

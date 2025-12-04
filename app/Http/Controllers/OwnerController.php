@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
 
 class OwnerController extends Controller
 {
@@ -235,7 +237,7 @@ public function editpesanan($id)
     return redirect()->route('owner.product')->with('success', 'Produk berhasil dihapus.');
 }
 
-    // ransaksi
+    // Transaksi
     public function transaksi(Request $request)
     {
     $tanggal = $request->tanggal;
@@ -260,8 +262,29 @@ public function editpesanan($id)
     return view('owner.transaksi', compact('transaksi', 'tanggal'));
     }
 
-    public function hapustransaksi($id)
+    public function detailtransaksi($id)
 {
+    $cart = DB::table('cart')
+        ->join('payment', 'cart.Id_Cart', '=', 'payment.Id_Cart')
+        ->select(
+            'cart.Id_Cart',
+            'cart.Nama',
+            'cart.No_Meja',
+            'payment.Catatan',
+            'cart.Status',
+            'payment.Jumlah_Bayar',
+            'payment.Metode',
+            'payment.Waktu_Bayar'
+        )
+        ->where('cart.Id_Cart', $id)
+        ->first();
+        if (!$cart) {
+    return view('kasir.detailhistory', compact('cart'));
+    }
+    }
+
+    public function hapustransaksi($id)
+    {
     try {
         // Hapus detail cart terlebih dahulu
         DB::table('detail_cart')->where('Id_Cart', $id)->delete();
@@ -379,6 +402,57 @@ public function editpesanan($id)
 
     return redirect()->route('owner.editpesanan', $IdCart)
         ->with('success', 'Produk berhasil ditambahkan.');
-}
+    }
+
+    public function addkasir()
+    {
+        return view('owner.addkasir');
+    }
+
+    public function storekasir(Request $request)
+    {
+    $request->validate([
+        'Nama_Kasir' => 'required|string|max:100',
+        'Username' => 'required|string|max:50|unique:user,Username',
+        'Password' => 'required|string|min:6',
+        'Kontak_Kasir' => 'required|string|max:20',
+    ]);
+
+    // Simpan ke tabel user dan ambil ID baru
+    $User = DB::table('user')->insertGetId([
+        'Nama' => $request->Nama_Kasir,
+        'Username' => $request->Username,
+        'Password' => Hash::make($request->Password),
+        'Role' => 'kasir'
+    ]);
+
+    // Simpan ke tabel kasir menggunakan ID user
+    DB::table('kasir')->insert([
+        'Id_User' => $User,
+        'Nama_Kasir' => $request->Nama_Kasir,
+        'Kontak_Kasir' => $request->Kontak_Kasir
+    ]);
+
+    return redirect()->route('owner.dashboard')->with('success', 'Akun kasir berhasil dibuat!');
+    }
+
+    public function listkasir()
+    {
+    $kasir = DB::table('kasir')
+        ->join('user', 'kasir.Id_User', '=', 'user.Id_User')
+        ->select('kasir.*', 'user.Username', 'user.Password')
+        ->get();
+
+    return view('owner.listkasir', compact('kasir'));
+    }
+
+    public function deletekasir($id)
+    {
+    // Hapus USER → otomatis kasir terhapus (FK CASCADE)
+    DB::table('user')->where('Id_User', $id)->delete();
+
+    return redirect()->route('owner.listkasir')->with('success', 'Kasir berhasil dihapus!');
+    }
+
 }
 

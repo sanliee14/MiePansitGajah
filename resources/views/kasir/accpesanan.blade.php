@@ -42,6 +42,7 @@
             <!-- INFO + BUTTON -->
             <div class="bg-blue-500 px-5 py-4 text-white flex justify-between items-center">
                 <div class="leading-tight">
+                    <p class="text-xl font-bold">{{ $item->Nama }}</p>
                     <p class="text-lg font-bold">Meja {{ $item->No_Meja }}</p>
                     <p class="text-sm opacity-90">Status: {{ ucfirst($item->Status) }}</p>
                 </div>
