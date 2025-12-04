@@ -11,13 +11,18 @@
 <body class="bg-gradient-to-b from-blue-100 via-blue-200 to-white min-h-screen text-gray-800 flex flex-col">
 
   <!-- Navbar -->
-  <nav class="bg-blue-500 text-white flex justify-between items-center px-6 py-3 shadow-lg">
-    <div class="flex items-center space-x-3">
-      <img src="{{ asset('image/fix.png') }}" class="w-10 h-10 rounded-full ring-2 ring-white/70">
-      <h1 class="text-xl font-bold uppercase tracking-wide">Mie Pansit Gajah Siantar</h1>
+<header class="bg-blue-500 text-white py-4 px-6 shadow-md flex items-center gap-4">
+    <div class="w-12 h-12 rounded-full overflow-hidden ring-2 ring-white/70 shadow">
+        <img src="{{ asset('image/fix.png') }}" 
+            alt="Logo" 
+            class="w-full h-full object-cover">
     </div>
-    <button class="bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full">Logout</button>
+    </div>
+    <a href="{{ url('/owner/dashboard') }}" class="ml-auto bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition">
+      Back
+    </a>
   </nav>
+</header>
 
   <!-- Layout -->
   <div class="flex flex-1">
@@ -27,7 +32,7 @@
       <h2 class="text-lg font-bold mb-6 text-white/90 uppercase tracking-wide">Menu Owner</h2>
       <ul class="space-y-4">
         <li><a href="{{ url('/owner/dashboard') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300">Dashboard</a></li>
-        <li><a href="{{ url('/owner/transaksi') }}" class="block bg-blue-500 py-2 px-3 rounded-full font-semibold shadow">Data Transaksi</a></li>
+        <li><a href="{{ url('/owner/transaksi') }}" class="block bg-blue-500 py-2 px-3 text-center rounded-full font-semibold shadow">Data Transaksi</a></li>
         <li><a href="{{ url('/owner/product') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300">Product & Harga</a></li>
         <li><a href="{{ url('/owner/laporan') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300">Laporan Harian</a></li>
         <li><a href="{{ url('/owner/tambahproduct') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300">Tambah Produk</a></li>

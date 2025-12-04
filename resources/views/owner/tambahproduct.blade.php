@@ -15,19 +15,20 @@
 <body class="bg-gradient-to-b from-blue-100 via-blue-200 to-white min-h-screen flex flex-col text-gray-800">
 
   <!-- Navbar -->
-  <nav class="bg-blue-500 text-white flex justify-between items-center px-6 py-3 shadow-lg">
-    <div class="flex items-center space-x-3">
-      <div class="relative w-10 h-10">
-        <div class="absolute inset-0 bg-blue-400 blur-xl opacity-40 rounded-full"></div>
-        <img src="{{ asset('image/fix.png') }}" alt="Logo" class="relative w-10 h-10 rounded-full ring-2 ring-white/70">
-      </div>
+  <header class="bg-blue-500 text-white py-4 px-6 shadow-md flex items-center gap-4">
+    <div class="w-12 h-12 rounded-full overflow-hidden ring-2 ring-white/70 shadow">
+        <img src="{{ asset('image/fix.png') }}" 
+            alt="Logo" 
+            class="w-full h-full object-cover">
+    </div>
+    <div>
       <h1 class="text-xl font-bold uppercase tracking-wide">Tambah Produk</h1>
     </div>
-
-    <a href="{{ route('owner.product') }}" class="bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition">
-      ← Kembali
+    <a href="{{ route('owner.product') }}" class="ml-auto bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition">
+    Back
     </a>
   </nav>
+  </header>
 
   <!-- FORM CONTAINER -->
   <div class="flex justify-center items-center flex-1 px-4">

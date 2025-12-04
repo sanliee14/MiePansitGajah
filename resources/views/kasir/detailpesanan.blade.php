@@ -24,6 +24,7 @@
 
 <main class="p-5">
 
+<div class="max-w-3xl mx-auto px-4 py-6">
     <!-- ID + TOTAL -->
     <div class="bg-white px-4 py-2 flex justify-between font-bold rounded-xl shadow mb-5">
         <span>ID Pesanan : #{{ $cart->Id_Cart }}</span>
@@ -69,7 +70,7 @@
             
         </form>
     </div>
-
+</div>
 </main>
 </body>
 </html>

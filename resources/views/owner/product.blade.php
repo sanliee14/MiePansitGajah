@@ -12,15 +12,20 @@
 <body class="bg-blue-100 min-h-screen flex flex-col text-gray-800">
 
   <!-- Navbar -->
-  <nav class="bg-blue-500 text-white flex justify-between items-center px-6 py-3 shadow-lg">
-    <div class="flex items-center space-x-3">
-      <img src="{{ asset('image/fix.png') }}" alt="Logo" class="w-10 h-10 rounded-full ring-2 ring-white/70">
+<header class="bg-blue-500 text-white py-4 px-6 shadow-md flex items-center gap-4">
+    <div class="w-12 h-12 rounded-full overflow-hidden ring-2 ring-white/70 shadow">
+        <img src="{{ asset('image/fix.png') }}" 
+            alt="Logo" 
+            class="w-full h-full object-cover">
+    </div>
+    <div>
       <h1 class="text-xl font-bold uppercase tracking-wide">Mie Pansit Gajah Siantar</h1>
     </div>
-    <a href="{{ url('/') }}" class="bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition">
-      Logout
+    <a href="{{ url('/owner/dashboard') }}" class="ml-auto bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition">
+      Back
     </a>
   </nav>
+</header>
 
   <div class="flex flex-1">
 

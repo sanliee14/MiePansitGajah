@@ -13,18 +13,25 @@
 <body class="bg-gradient-to-b from-blue-100 via-blue-200 to-white min-h-screen flex flex-col text-gray-800">
 
   <!-- NAVBAR -->
-  <nav class="bg-blue-500 text-white flex justify-between items-center px-6 py-3 shadow-lg">
-    <div class="flex items-center space-x-3">
-      <img src="{{ asset('image/fix.png') }}" class="w-10 h-10 rounded-full ring-2 ring-white/70" />
-      <h1 class="text-xl font-bold uppercase tracking-wide">Mie Pansit Gajah Siantar</h1>
+<header class="bg-blue-500 text-white py-4 px-6 shadow-md flex items-center gap-4">
+    <div class="w-12 h-12 rounded-full overflow-hidden ring-2 ring-white/70 shadow">
+        <img src="{{ asset('image/fix.png') }}" 
+            alt="Logo" 
+            class="w-full h-full object-cover">
     </div>
-    <a href="{{ route('owner.dashboard') }}" class="bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition">Kembali</a>
+    <div>
+      <h1 class="text-xl font-bold uppercase">Mie Pansit Gajah Siantar</h1>
+    </div>
+    <a href="{{ url('/owner/editpesanan') }}" class="ml-auto bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition">
+      Back
+    </a>
   </nav>
+</header>
 
   <div class="flex flex-1">
 
     <!-- SIDEBAR -->
-    <aside class="w-64 bg-blue-400 text-white min-h-screen p-6 shadow-xl">
+    <!-- <aside class="w-64 bg-blue-400 text-white min-h-screen p-6 shadow-xl">
       <h2 class="text-lg font-bold mb-6 uppercase tracking-wide">Menu Owner</h2>
       <ul class="space-y-3">
         <li><a href="{{ route('owner.dashboard') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition">Dashboard</a></li>
@@ -33,7 +40,7 @@
         <li><a href="{{ route('owner.laporan') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition">Laporan Harian</a></li>
         <li><a href="{{ route('owner.tambahproduct') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition">Tambah Produk</a></li>
       </ul>
-    </aside>
+    </aside> -->
 
     <!-- PRODUK GRID -->
     <main class="flex-1 p-6 flex justify-center">

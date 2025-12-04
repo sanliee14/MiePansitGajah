@@ -29,7 +29,7 @@
 
     <!-- Konten -->
     <main class="flex-1 overflow-y-auto px-5 py-4 space-y-4">
-    
+    <div class="max-w-3xl mx-auto px-4 py-6">
         <!-- Daftar Item -->
         @foreach ($detail as $item)
         <div class="bg-white rounded-2xl p-4 flex items-center justify-between">
@@ -67,6 +67,7 @@
         ✓ SELESAIKAN PESANAN
     </button>
 </form>
+</div>
     </main>
 
     <!-- Status -->

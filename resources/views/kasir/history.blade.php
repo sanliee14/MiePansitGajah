@@ -22,6 +22,7 @@
     </header>
 
     <!-- FILTER TANGGAL -->
+    <div class="max-w-3xl mx-auto px-4 py-6">
     <form action="{{ route('kasir.history') }}" method="GET" class="px-5 mt-4 mb-4">
         <label class="block font-semibold text-gray-700 mb-1">Filter Tanggal</label>
         
@@ -68,7 +69,7 @@
         <p class="text-center text-gray-600 mt-10">Tidak ada pesanan selesai pada tanggal ini.</p>
 
         @endforelse
-
+</div>
     </main>
 
     <!-- NAVBAR BAWAH -->

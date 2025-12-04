@@ -27,7 +27,8 @@
 
     <!-- List Pesanan -->
     <main class="p-5">
-
+        <div class="max-w-3xl mx-auto px-4 py-6">
+    <div class="max-w-3xl mx-auto px-4 py-6">
         @foreach ($order as $psn)
         <a href="{{ route('kasir.detailproses', $psn->Id_Cart) }}">
         <div class="bg-white shadow-lg rounded-2xl overflow-hidden border border-blue-100 mb-5 transition hover:shadow-blue-200">
@@ -51,7 +52,7 @@
                     <p class="text-sm opacity-90">Meja : {{ $psn->No_Meja ?? '-' }}</p>
                 </div>
 
-                <span class="px-6 py-2.5 rounded-xl font-bold text-black bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-500 shadow-[0_4px_10px_rgba(0,0,0,0.2)] transform hover:scale-105 transition">
+                <span class="px-6 py-2.5 rounded-xl font-bold text-black bg-white  shadow-[0_4px_10px_rgba(0,0,0,0.2)] transform hover:scale-105 transition">
                     {{ strtoupper($psn->Status) }}
                 </span>
 
@@ -60,7 +61,8 @@
         </div>
         </a>
         @endforeach
-
+</div>
+</div>
     </main>
 
     <!-- nav bawah -->
