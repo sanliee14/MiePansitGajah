@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Owner | Mie Pansit Gajah Siantar</title>
@@ -23,6 +26,10 @@
     </div>
     <button class="ml-auto bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition-all duration-200">
       Logout
+      <a href="{{ route('logout') }}" 
+   class="ml-auto bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition-all duration-200 text-center">
+   Logout
+</a>
     </button>
   </nav>
 </header>
@@ -163,6 +170,22 @@
   </div>
 
 </div>
+
+
+               <script>
+    window.addEventListener("pageshow", function(event) {
+        var historyTraversal = event.persisted || 
+                               (typeof window.performance != "undefined" && 
+                                window.performance.navigation.type === 2);
+        
+        if (historyTraversal) {
+            // Sembunyikan konten agar tidak sempat terbaca
+            document.body.style.display = 'none';
+            // Paksa reload ke server (server akan menendang ke login)
+            window.location.reload(); 
+        }
+    });
+</script>
 
       </section>
 

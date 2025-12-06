@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -14,33 +15,53 @@ class KasirController extends Controller
         return view('kasir.login');
     }
 
-    public function proseslogin(Request $request)
-    {
-    // Validasi input
-    $request->validate([
-        'username' => 'required',
-        'password' => 'required'
+
+public function logout(Request $request)
+{
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    // Tambahkan withHeaders ini untuk memaksa browser lupa segalanya
+    return redirect('/kasir/login')->withHeaders([
+        'Cache-Control' => 'no-cache, no-store, must-revalidate, max-age=0',
+        'Pragma' => 'no-cache',
+        'Expires' => 'Fri, 01 Jan 1990 00:00:00 GMT',
+        'Clear-Site-Data' => '"cache", "storage", "executionContexts"'
     ]);
+}
 
-    // Cek user berdasarkan username (atau email, sesuai database kamu)
-    $user = DB::table('user')
-        ->where('Username', $request->username)
-        ->first();
+public function proseslogin(Request $request)
+    {
+        // 1. Validasi input
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required'
+        ]);
 
-    if (!$user) {
-        return back()->with('error', 'Username tidak ditemukan.');
-    }
+        // 2. [PERBAIKAN UTAMA] Gunakan Model User::where
+        // Jangan pakai DB::table, supaya settingan 'Id_User' terbaca otomatis
+        $user = User::where('Username', $request->username)->first();
 
-    // Cek password (pastikan password di DB sudah di-hash!)
-    if (!Hash::check($request->password, $user->Password)) {
-        return back()->with('error', 'Password salah.');
-    }
+        // 3. Cek apakah user ditemukan
+        if (!$user) {
+            return back()->with('error', 'Username tidak ditemukan.');
+        }
 
-    // LOGIN MANUAL (karena pakai table kasir, bukan users)
-    auth()->loginUsingId($user->Id_Kasir);
+        // 4. Cek Password (menggunakan Hash)
+        if (!Hash::check($request->password, $user->Password)) {
+            return back()->with('error', 'Password salah.');
+        }
 
-    return redirect()->route('kasir.dashboard')
-    ->with('success', 'Berhasil login.');
+        // 5. [PERBAIKAN UTAMA] Login User
+        // Auth::login akan menyimpan sesi user dengan benar karena kita pakai Model
+        Auth::login($user);
+        
+        // 6. Regenerasi Session agar tidak mental/logout sendiri
+        $request->session()->regenerate();
+
+        // 7. Redirect ke dashboard
+        return redirect()->route('kasir.dashboard')->with('success', 'Berhasil login.');
     }
 
     public function dashboardkasir()
@@ -225,12 +246,22 @@ class KasirController extends Controller
     return view('kasir.detailproses', compact('cart', 'detail'));
     }
 
- public function selesai($id)
+public function selesai($id)
 {
-    // Ambil ID user kasir yang sedang login
-    $idkasir = auth()->user()->Id_User;
+    // 1. Ambil ID User yang sedang login (12348)
+    $idUser = auth()->user()->Id_User;
 
-    // Update status cart
+    // 2. Cari ID Kasir aslinya di tabel 'kasir' berdasarkan Id_User tadi
+    $dataKasir = DB::table('kasir')->where('Id_User', $idUser)->first();
+
+    // Cek jika akun ini ternyata belum terdaftar sebagai kasir
+    if (!$dataKasir) {
+        return redirect()->back()->with('error', 'Error: Akun login ini tidak terdaftar di tabel Kasir.');
+    }
+
+    $idKasirAsli = $dataKasir->Id_Kasir; // Ini akan mengambil angka 1
+
+    // 3. Update status cart
     DB::table('cart')
         ->where('Id_Cart', $id)
         ->update([
@@ -238,19 +269,18 @@ class KasirController extends Controller
             'updated_at' => now()
         ]);
 
-    // Update payment
+    // 4. Update payment dengan Id_Kasir yang BENAR
     DB::table('payment')
         ->where('Id_Cart', $id)
         ->update([
             'Status' => 'selesai',
-            'Id_Kasir' => $idkasir, // simpan kasir yang ACC
+            'Id_Kasir' => $idKasirAsli, // Masukkan 1, bukan 12348
             'updated_at' => now()
         ]);
 
     return redirect()->route('kasir.prosespesanan')
         ->with('success', 'Pesanan telah selesai.');
 }
-
     public function history(Request $request)
     {
     $tanggal = $request->tanggal;
@@ -277,10 +307,11 @@ class KasirController extends Controller
 
 
     public function detailhistory($id)
-    {
+{
     $cart = DB::table('cart')
         ->join('payment', 'cart.Id_Cart', '=', 'payment.Id_Cart')
-        ->leftJoin('user', 'payment.Id_Kasir', '=', 'user.Id_User')
+        // Cukup Join ke tabel kasir saja
+        ->leftJoin('kasir', 'payment.Id_Kasir', '=', 'kasir.Id_Kasir')
         ->select(
             'cart.Id_Cart',
             'cart.Nama',
@@ -291,15 +322,11 @@ class KasirController extends Controller
             'payment.Metode',
             'payment.Waktu_Bayar',
             'payment.Id_Kasir',
-            'users.Name as NamaKasir'
+            // Ambil Nama_Kasir langsung dari tabel kasir (Sesuai Gambar Database Anda)
+            'kasir.Nama_Kasir as NamaKasir' 
         )
         ->where('cart.Id_Cart', $id)
         ->first();
-
-    if (!$cart) {
-        return redirect()->route('kasir.history')
-            ->with('error', 'Data tidak ditemukan.');
-    }
 
     if (!$cart) {
         return redirect()->route('kasir.history')->with('error', 'Data tidak ditemukan.');
@@ -318,10 +345,10 @@ class KasirController extends Controller
         ->get();
 
     return view('kasir.detailhistory', compact('cart', 'detail'));
-    }
-
+}
     public function transaksi()
     {
         return view('kasir.transaksi');
     }
 }
+

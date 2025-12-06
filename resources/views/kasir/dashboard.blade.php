@@ -22,9 +22,9 @@
         <i class="fas fa-search text-white/90 mr-2 text-lg"></i>
         <input type="text" placeholder="Cari menu…" class="bg-transparent placeholder-white/80 text-white focus:outline-none w-full text-sm">
     </div>
-    <a href="{{ url('/kasir/login') }}" class="ml-auto bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition">
-    Logout
-    </a>
+   <a href="{{ route('logout') }}" class="ml-auto bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition">
+Logout
+</a>
 </header>
 
 <!-- SIDEBAR -->
@@ -127,5 +127,35 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
     });
 });
 </script>
+<script src="https://kit.fontawesome.com/a2e0a6c5f6.js" crossorigin="anonymous"></script>
+<script>
+    // --- Script Cart Lama ---
+    let cartCount = 0;
+    let cartTotal = 0;
+    document.querySelectorAll('.add-to-cart').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const price = parseInt(btn.dataset.price);
+            cartCount++;
+            cartTotal += price;
+            document.getElementById('cart-count').innerText = cartCount;
+            document.getElementById('cart-total').innerText = 'Rp' + cartTotal.toLocaleString('id-ID');
+        });
+    });
+
+    // --- TAMBAHAN SCRIPT ANTI-BACK (Copy yang ini) ---
+    window.addEventListener("pageshow", function(event) {
+        var historyTraversal = event.persisted || 
+                               (typeof window.performance != "undefined" && 
+                                window.performance.navigation.type === 2);
+        
+        // Jika terdeteksi tombol back ditekan
+        if (historyTraversal) {
+            // Segera reload halaman agar server menendang user ke login
+            window.location.reload();
+        }
+    });
+</script>
+</body>
+</html>
 </body>
 </html>
