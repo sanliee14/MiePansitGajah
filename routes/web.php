@@ -48,6 +48,7 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     
     // Dashboard Kasir
     Route::get('/kasir/dashboard', [KasirController::class, 'dashboardkasir'])->name('kasir.dashboard');
+    Route::get('/kasir/search-product', [KasirController::class, 'searchProduct'])->name('kasir.searchProduct');
     Route::get('/kasir/menu', [KasirController::class, 'menu'])->name('kasir.menu');
     Route::get('/logout', [KasirController::class, 'logout'])->name('logout');
     // Kelola Pesanan
