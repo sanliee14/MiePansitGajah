@@ -69,6 +69,19 @@ public function proseslogin(Request $request)
         $product = DB::table('product')->get();
         return view('kasir.dashboard', compact('product'));
     }
+    public function searchProduct(Request $request)
+{
+    $keyword = $request->input('q');
+
+    $product = DB::table('product')
+        ->where('Nama_Product', 'LIKE', "%{$keyword}%")
+        ->orWhere('Harga', 'LIKE', "%{$keyword}%")
+        ->orderBy('Id_Product', 'desc')
+        ->get();
+
+    return view('kasir.dashboard', compact('product', 'keyword'));
+}
+
 
     public function payment()
     {
@@ -281,6 +294,7 @@ public function selesai($id)
     return redirect()->route('kasir.prosespesanan')
         ->with('success', 'Pesanan telah selesai.');
 }
+    
     public function history(Request $request)
     {
     $tanggal = $request->tanggal;
