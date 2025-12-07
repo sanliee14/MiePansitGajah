@@ -7,7 +7,7 @@
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>
-<!-- <body style="background-image: url('{{ asset('image/4.jpeg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;" class="flex flex-col items-center justify-center min-h-screen font-sans text-gray-800"> -->
+
 <body class="bg-white flex flex-col items-center justify-center min-h-screen font-sans text-gray-800">
 
     <div class="bg-blue-300 border border-white/30 rounded-3xl shadow-2xl p-8 w-90 text-center">
@@ -23,13 +23,13 @@
         </h1>
 
         @if($errors->has('db'))
-    <div class="bg-red-500 text-white p-2 rounded mb-3">
-        {{ $errors->first('db') }}
-    </div>
-    @endif
+            <div class="bg-red-500 text-white p-2 rounded mb-3">
+                {{ $errors->first('db') }}
+            </div>
+        @endif
 
-
-        <form action="{{ route('customer.order') }}" method="POST" class="space-y-4">
+        {{-- FORM BISA DIPAKAI CUSTOMER & KASIR --}}
+        <form action="{{ $action ?? route('customer.order') }}" method="POST" class="space-y-4">
             @csrf
             <input type="text" name="nama" placeholder="Nama Anda"
                 class="w-full px-4 py-3 rounded-xl bg-white/30 text-black placeholder-gray focus:outline-none focus:ring-2 focus:ring-blue-300">

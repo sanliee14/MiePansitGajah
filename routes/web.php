@@ -46,12 +46,35 @@ Route::get('/owner/login', [OwnerController::class, 'login'])->name('owner.login
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'prevent-back-history'])->group(function () {
-    
+
     // Dashboard Kasir
     Route::get('/kasir/dashboard', [KasirController::class, 'dashboardkasir'])->name('kasir.dashboard');
+
+    // ========== ALUR PESAN LANGSUNG DI KASIR ==========
+    // 1) Setelah kasir klik "Checkout" di menu, masuk ke form Nama & Meja
+    Route::get('/kasir/data', function () {
+        return view('customer.data', [
+            'action' => route('kasir.datacheckout'),
+        ]);
+    })->name('kasir.data');
+
+    // 2) Simpan nama & meja ke session
+    Route::post('/kasir/datacheckout', [CustomerController::class, 'datacheckout'])
+        ->name('kasir.datacheckout');
+
+    // 3) Halaman checkout khusus kasir (pakai view checkout yang sama)
+    Route::get('/kasir/checkout', [CustomerController::class, 'checkout'])
+        ->name('kasir.checkout');
+
+    // 4) Aksi bayar khusus kasir
+    Route::post('/kasir/bayar', [CustomerController::class, 'bayar'])
+        ->name('kasir.bayar');
+    // ==================================================
+
     Route::get('/kasir/search-product', [KasirController::class, 'searchProduct'])->name('kasir.searchProduct');
     Route::get('/kasir/menu', [KasirController::class, 'menu'])->name('kasir.menu');
     Route::get('/logout', [KasirController::class, 'logout'])->name('logout');
+
     // Kelola Pesanan
     Route::get('/kasir/accpesanan', [KasirController::class, 'accpesanan'])->name('kasir.accpesanan');
     Route::get('/kasir/payment', [KasirController::class, 'payment'])->name('kasir.payment');
@@ -105,4 +128,5 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     Route::get('/owner/addorder/{id}', [OwnerController::class, 'addorder'])->name('owner.addorder');
     Route::get('/owner/{id}/addproduct', [OwnerController::class, 'index'])->name('owner.addproduct');
 });
+
 Route::redirect('/login', '/kasir/login')->name('login');
