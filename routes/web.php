@@ -21,6 +21,7 @@ Route::get('/cust/home', [CustomerController::class, 'dashboard'])->name('cust.h
 Route::get('/customer/data', [CustomerController::class, 'data'])->name('customer.data');
 Route::post('/customer/order', [CustomerController::class, 'order'])->name('customer.order');
 Route::get('/customer/menu', [CustomerController::class, 'menu'])->name('customer.menu');
+Route::get('/customer/search-menu', [CustomerController::class, 'searchMenu'])->name('customer.searchMenu');
 Route::post('/customer/cart', [CustomerController::class, 'cart'])->name('customer.cart');
 Route::post('/customer/cartupdate', [CustomerController::class, 'cartupdate'])->name('customer.cartupdate');
 Route::get('/customer/fav', [CustomerController::class, 'fav'])->name('customer.fav');
