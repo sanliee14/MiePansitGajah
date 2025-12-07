@@ -23,6 +23,18 @@ class CustomerController extends Controller
     $product = DB::table('product')->get();
     return view('customer.menu', compact('product'));
     }
+    public function searchMenu(Request $request)
+{
+    $keyword = $request->search;
+
+    $product = DB::table('product')
+        ->where('Nama_Product', 'like', "%{$keyword}%")
+        ->orWhere('Kategori', 'like', "%{$keyword}%")
+        ->get();
+
+    return view('customer.menu', compact('product'));
+}
+
 
     public function order(Request $request)
     {
