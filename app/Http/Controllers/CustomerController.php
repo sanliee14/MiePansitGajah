@@ -123,24 +123,25 @@ class CustomerController extends Controller
     ]);
     }
 
+
     public function fav()
     { 
-        $products = DB::table('product')->get();
+        $products = DB::table('product')->where('kategori', 'favorit')->get();
         return view('customer.fav', ['products' => $products]);
     }
 
     public function makanan()
     {
-        $products = DB::table('product')->get();
+        $products = DB::table('product')->where('kategori', 'makanan')->get();
         return view('customer.makanan', ['products' => $products]);
     }
 
     public function minuman()
     {
-        $products = DB::table('product')->get();
+        $products = DB::table('product')->where('kategori', 'minuman')->get();
         return view('customer.minuman', ['products' => $products]);
     }
-
+    
     public function checkout()
     {
     // Ambil session keranjang (dari JS)
