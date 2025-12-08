@@ -10,34 +10,34 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    // --- PENGATURAN PENTING (WAJIB ADA) ---
-
-    // 1. Sesuaikan nama tabel (Default Laravel: 'users', Database Anda: 'user')
+    // 1. Nama Tabel (Wajib karena tidak standar 'users')
     protected $table = 'user';
 
-    // 2. Sesuaikan Primary Key (Default Laravel: 'id', Database Anda: 'Id_User')
+    // 2. Primary Key (Wajib karena tidak standar 'id')
     protected $primaryKey = 'Id_User';
+    
+    // Pastikan tipe datanya benar
+    public $incrementing = true;
+    protected $keyType = 'int';
 
-    // 3. Matikan Timestamps (Default Laravel: True)
-    // Karena tabel 'user' di screenshot Anda tidak punya kolom 'created_at' dan 'updated_at'
-    // Jika ini True, aplikasi akan error saat mencoba update data login.
+    // 3. Matikan Timestamps (Karena tabel tidak punya created_at/updated_at)
     public $timestamps = false;
 
-    // ----------------------------------------
-
+    // 4. Kolom yang boleh diisi
     protected $fillable = [
-        'Nama',      // Sesuaikan dengan kolom DB
-        'Username',  // Sesuaikan dengan kolom DB
-        'Password',  // Sesuaikan dengan kolom DB
-        'Role',      // Sesuaikan dengan kolom DB
+        'Nama',
+        'Username',
+        'Password',
+        'Role',
     ];
 
+    // 5. Kolom yang disembunyikan
     protected $hidden = [
         'Password',
         'remember_token',
     ];
 
-    // Override password agar Laravel tahu kolom password Anda bernama 'Password' (Huruf Besar)
+    // 6. Override Password (Wajib karena kolomnya 'Password' huruf besar)
     public function getAuthPassword()
     {
         return $this->Password;

@@ -6,15 +6,54 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Auth;
 
 class OwnerController extends Controller
 {
+   // --- LOGIN OWNER ---
     public function login()
     {
         return view('owner.login');
     }
 
+   public function proseslogin(Request $request)
+    {
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        $user = \App\Models\User::where('Username', $request->username)->first();
+
+        
+        if (!$user) {
+            return back()->with('error', 'Username tidak ditemukan.');
+        }
+        if (!\Illuminate\Support\Facades\Hash::check($request->password, $user->Password)) {
+            return back()->with('error', 'Password salah.');
+        }
+
+        if (trim(strtolower($user->Role)) !== 'owner') {
+            return back()->with('error', 'Akun ini bukan akun Owner.');
+        }
+
+        // --- JIKA LOLOS SEMUA PENGECEKAN DI ATAS ---
+        
+        // Lakukan Login
+        \Illuminate\Support\Facades\Auth::login($user);
+        $request->session()->regenerate();
+
+        // Redirect ke Dashboard
+        return redirect()->route('owner.dashboard')->with('success', 'Selamat datang Owner!');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/owner/login');
+    }
     public function dashboard(Request $request)
     {
     // Ambil tanggal filter dari query

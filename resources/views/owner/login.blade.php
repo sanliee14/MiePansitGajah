@@ -19,11 +19,11 @@
             </div>
         </div>
         <h1 class="text-2xl font-extrabold tracking-wide uppercase mt-2 mb-6 bg-blue-400 text-transparent bg-clip-text drop-shadow-sm">
-            Kasir Mie Pansit Gajah Siantar
+            Owner Mie Pansit Gajah Siantar
         </h1>
-
+        
         <!-- form username & passowrd -->
-        <form action="{{ route('customer.order') }}" method="get" class="space-y-4">
+        <form action="{{ route('owner.proseslogin') }}" method="POST" class="space-y-4">
             @csrf
             <input type="text" name="username" placeholder="Username"
                 class="w-full px-4 py-3 rounded-xl bg-white/30 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
@@ -37,9 +37,31 @@
             </button>
         </form>
 
+     <!-- lupa pass -->
+        <p class="text-sm text-gray-700 mt-4">
+            Lupa password? <a href="#" class="text-blue-700 hover:underline">Hubungi Owner</a>
+        </p>
+    </div>
+
     <p class="absolute bottom-8 text-xs text-gray-800">
         © {{ date('Y') }} Mie Pansit Gajah Siantar. Semua hak dilindungi.
     </p>
+
+    @if(session('error'))
+    <div style="color: red; background-color: #ffcccc; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center;">
+        {{ session('error') }}
+    </div>
+@endif
+
+@if ($errors->any())
+    <div style="color: red; margin-bottom: 15px; text-align: center;">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
 </body>
 </html>

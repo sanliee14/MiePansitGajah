@@ -94,11 +94,23 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| ROUTE KHUSUS OWNER/ADMIN (Wajib Login)
+| ROUTE KHUSUS OWNER/ADMIN
 |--------------------------------------------------------------------------
 */
+
+// 1. ROUTE PUBLIK (Bisa diakses tanpa login)
+// PENTING: Jangan masukkan ini ke dalam middleware 'auth'!
+Route::get('/owner/login', [OwnerController::class, 'login'])->name('owner.login');
+Route::post('/owner/proseslogin', [OwnerController::class, 'proseslogin'])->name('owner.proseslogin');
+
+
+// 2. ROUTE PRIVATE (Wajib Login)
 Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     
+    // Logout (Hanya bisa logout kalau sudah login)
+    Route::get('/owner/logout', [OwnerController::class, 'logout'])->name('owner.logout');
+    
+    // Dashboard & Menu Owner
     Route::get('/owner/dashboard', [OwnerController::class, 'dashboard'])->name('owner.dashboard');
     Route::get('/owner/product', [OwnerController::class, 'product'])->name('owner.product');
     Route::match(['get', 'post'], '/owner/tambahproduct', [OwnerController::class, 'tambahproduct'])->name('owner.tambahproduct');
