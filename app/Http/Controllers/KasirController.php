@@ -57,6 +57,19 @@ class KasirController extends Controller
         $product = DB::table('product')->get();
         return view('kasir.dashboard', compact('product'));
     }
+    public function searchProduct(Request $request)
+{
+    $keyword = $request->input('q');
+
+    $product = DB::table('product')
+        ->where('Nama_Product', 'LIKE', "%{$keyword}%")
+        ->orWhere('Harga', 'LIKE', "%{$keyword}%")
+        ->orderBy('Id_Product', 'desc')
+        ->get();
+
+    return view('kasir.dashboard', compact('product', 'keyword'));
+}
+
 
     public function payment()
     {
@@ -251,10 +264,9 @@ class KasirController extends Controller
                 'updated_at' => now()
             ]);
 
-        return redirect()->route('kasir.prosespesanan')
-            ->with('success', 'Pesanan telah selesai.');
-    }
-
+    return redirect()->route('kasir.prosespesanan')
+        ->with('success', 'Pesanan telah selesai.');
+}
     public function history(Request $request)
     {
         $tanggal = $request->tanggal;
