@@ -86,7 +86,7 @@
     </div>
 
     <div class="flex justify-between mt-8">
-        <a href="{{ url('/owner/produk') }}"
+        <a href="{{ url('/owner/product') }}"
            class="bg-gray-400 text-white px-5 py-2 rounded-xl shadow hover:bg-gray-500 transition">
            Kembali
         </a>
