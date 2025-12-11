@@ -99,7 +99,6 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
 */
 
 // 1. ROUTE PUBLIK (Bisa diakses tanpa login)
-// PENTING: Jangan masukkan ini ke dalam middleware 'auth'!
 Route::get('/owner/login', [OwnerController::class, 'login'])->name('owner.login');
 Route::post('/owner/proseslogin', [OwnerController::class, 'proseslogin'])->name('owner.proseslogin');
 
@@ -107,6 +106,10 @@ Route::post('/owner/proseslogin', [OwnerController::class, 'proseslogin'])->name
 // 2. ROUTE PRIVATE (Wajib Login)
 Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     
+   // Edit & Reset Password Kasir
+    Route::get('/owner/editkasir/{id}', [OwnerController::class, 'editkasir'])->name('owner.editkasir');
+    Route::post('/owner/updatekasir/{id}', [OwnerController::class, 'updatekasir'])->name('owner.updatekasir');
+   
     // Logout (Hanya bisa logout kalau sudah login)
     Route::get('/owner/logout', [OwnerController::class, 'logout'])->name('owner.logout');
     

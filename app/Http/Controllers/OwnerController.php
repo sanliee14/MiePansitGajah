@@ -448,6 +448,57 @@ public function editpesanan($id)
         return view('owner.addkasir');
     }
 
+    // TAMPILKAN FORM EDIT
+    public function editkasir($id)
+    {
+        // Ambil data gabungan user dan kasir berdasarkan Id_User
+        $data = DB::table('user')
+            ->join('kasir', 'user.Id_User', '=', 'kasir.Id_User')
+            ->where('user.Id_User', $id)
+            ->select('user.*', 'kasir.Kontak_Kasir')
+            ->first();
+
+        if (!$data) {
+            return back()->with('error', 'Data kasir tidak ditemukan.');
+        }
+
+        return view('owner.editkasir', compact('data'));
+    }
+
+    // PROSES UPDATE (RESET PASSWORD)
+    public function updatekasir(Request $request, $id)
+    {
+        $request->validate([
+            'Nama'     => 'required|string|max:100',
+            'Username' => 'required|string|max:50',
+            'Kontak'   => 'required|string|max:20',
+            'Password' => 'nullable|min:6', // Password BOLEH KOSONG (nullable)
+        ]);
+
+        // Siapkan data yang mau diupdate ke tabel User
+        $updateUser = [
+            'Nama'     => $request->Nama,
+            'Username' => $request->Username,
+        ];
+
+        // LOGIKA RESET PASSWORD
+        // Jika admin mengisi password baru, maka kita Hash dan masukkan ke update
+        if ($request->filled('Password')) {
+            $updateUser['Password'] = Hash::make($request->Password);
+        }
+
+        // Update Tabel User
+        DB::table('user')->where('Id_User', $id)->update($updateUser);
+
+        // Update Tabel Kasir
+        DB::table('kasir')->where('Id_User', $id)->update([
+            'Nama_Kasir'   => $request->Nama,
+            'Kontak_Kasir' => $request->Kontak
+        ]);
+
+        return redirect()->route('owner.listkasir')->with('success', 'Data kasir berhasil diperbarui.');
+    }
+
     public function storekasir(Request $request)
     {
     $request->validate([
