@@ -18,13 +18,22 @@
                 class="w-20 h-20 rounded-full ring-4 ring-white shadow-lg mb-2 object-cover">
             <h1 class="text-2xl font-extrabold text-white tracking-wide drop-shadow-lg">Mie Pansit Gajah Siantar</h1>
 
-            <div class="mt-4 flex items-center bg-white/90 rounded-full shadow-lg overflow-hidden w-80 sm:w-96">
-                <input type="text" placeholder="Cari menu..."
-                    class="flex-1 px-4 py-2 focus:outline-none bg-transparent text-gray-700">
-                <button class="px-4 bg-blue-500 text-white hover:bg-blue-400 transition">
+            {{-- ✅ SEARCH BAR (SUDAH JALAN) --}}
+            <form action="{{ route('customer.searchMenu') }}" method="GET"
+                class="mt-4 flex items-center bg-white/90 rounded-full shadow-lg overflow-hidden w-80 sm:w-96">
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ request('search') }}"
+                    placeholder="Cari menu..."
+                    class="flex-1 px-4 py-2 focus:outline-none bg-transparent text-gray-700"
+                >
+
+                <button type="submit" class="px-4 bg-blue-500 text-white hover:bg-blue-400 transition">
                     <i class="fas fa-search"></i>
                 </button>
-            </div>
+            </form>
         </div>
     </header>
 
