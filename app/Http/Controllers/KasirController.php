@@ -194,6 +194,7 @@ class KasirController extends Controller
         ->join('payment', 'cart.Id_Cart', '=', 'payment.Id_Cart')
         ->select(
             'cart.Id_Cart',
+            'cart.Id_User',
             'cart.Nama',
             'cart.No_Meja',
             'payment.Catatan',
