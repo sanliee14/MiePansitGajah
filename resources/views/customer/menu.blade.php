@@ -28,20 +28,41 @@
         </div>
     </header>
 
-    <nav class="relative z-30 flex justify-center mt-6">
-        <div class="bg-blue-100/70 backdrop-blur-md p-4 px-6 rounded-3xl shadow-lg flex gap-10 justify-center items-center w-fit">
-            <a href="{{ route('customer.fav') }}" class="flex flex-col items-center text-blue-600 hover:text-white hover:bg-blue-500 transition rounded-full w-16 h-16 bg-white shadow-md justify-center">
-                <i class="fas fa-thumbs-up text-xl"></i>
-                <span class="text-xs font-semibold mt-1">Favorit</span>
+<nav class="relative z-30 flex justify-center mt-6 px-4">
+        <div class="bg-blue-100/70 backdrop-blur-md p-3 rounded-full shadow-lg flex flex-wrap justify-center gap-2 sm:gap-4 w-fit border border-white/40">
+            
+            <a href="{{ route('customer.menu') }}" 
+               class="px-5 py-2 rounded-full font-bold text-sm transition-all duration-300 transform hover:scale-105 shadow-sm
+               {{ request()->routeIs('customer.menu') || request()->routeIs('cust.home') 
+                  ? 'bg-blue-600 text-white ring-2 ring-blue-300 shadow-blue-500/50' 
+                  : 'bg-white text-gray-600 hover:bg-blue-50 hover:text-blue-600' }}">
+               All Foods
             </a>
-            <a href="{{ route('customer.makanan') }}" class="flex flex-col items-center text-blue-600 hover:text-white hover:bg-blue-500 transition rounded-full w-16 h-16 bg-white shadow-md justify-center">
-                <i class="fas fa-utensils text-xl"></i>
-                <span class="text-xs font-semibold mt-1">Makanan</span>
+
+            <a href="{{ route('customer.fav') }}" 
+               class="px-5 py-2 rounded-full font-bold text-sm transition-all duration-300 transform hover:scale-105 shadow-sm
+               {{ request()->routeIs('customer.fav') 
+                  ? 'bg-blue-600 text-white ring-2 ring-blue-300 shadow-blue-500/50' 
+                  : 'bg-white text-gray-600 hover:bg-blue-50 hover:text-blue-600' }}">
+               Favorite
             </a>
-            <a href="{{ route('customer.minuman') }}" class="flex flex-col items-center text-blue-600 hover:text-white hover:bg-blue-500 transition rounded-full w-16 h-16 bg-white shadow-md justify-center">
-                <i class="fas fa-coffee text-xl"></i>
-                <span class="text-xs font-semibold mt-1">Minuman</span>
+
+            <a href="{{ route('customer.makanan') }}" 
+               class="px-5 py-2 rounded-full font-bold text-sm transition-all duration-300 transform hover:scale-105 shadow-sm
+               {{ request()->routeIs('customer.makanan') 
+                  ? 'bg-blue-600 text-white ring-2 ring-blue-300 shadow-blue-500/50' 
+                  : 'bg-white text-gray-600 hover:bg-blue-50 hover:text-blue-600' }}">
+               Makanan
             </a>
+
+            <a href="{{ route('customer.minuman') }}" 
+               class="px-5 py-2 rounded-full font-bold text-sm transition-all duration-300 transform hover:scale-105 shadow-sm
+               {{ request()->routeIs('customer.minuman') 
+                  ? 'bg-blue-600 text-white ring-2 ring-blue-300 shadow-blue-500/50' 
+                  : 'bg-white text-gray-600 hover:bg-blue-50 hover:text-blue-600' }}">
+               Minuman
+            </a>
+
         </div>
     </nav>
 
@@ -97,28 +118,37 @@
     </div>
 
     <script src="https://kit.fontawesome.com/a2e0a6c5f6.js" crossorigin="anonymous"></script>
-    <script>
-    document.querySelectorAll('.add-to-cart').forEach(btn => {
-        btn.addEventListener('click', () => {
-            fetch("{{ route('customer.cart') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify({
-                    id: btn.dataset.id,
-                    name: btn.dataset.name,
-                    price: btn.dataset.price
+<script>
+        // Update function untuk handle tombol Add to Cart
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.add-to-cart')) {
+                const btn = e.target.closest('.add-to-cart');
+                const id = btn.dataset.id;
+                const name = btn.dataset.name;
+                const price = parseInt(btn.dataset.price);
+
+                // Kirim ke backend via AJAX (Fetch) agar session tersimpan
+                fetch('{{ route("customer.cart") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        id: id,
+                        name: name,
+                        price: price
+                    })
                 })
-            })
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('cart-count').innerText = data.count;
-                document.getElementById('cart-total').innerText = 'Rp' + data.total.toLocaleString('id-ID');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    // Update tampilan keranjang berdasarkan respon server
+                    document.getElementById('cart-count').innerText = data.count;
+                    document.getElementById('cart-total').innerText = 'Rp' + data.total.toLocaleString('id-ID');
+                })
+                .catch(error => console.error('Error:', error));
+            }
         });
-    });
     </script>
 </body>
 </html>

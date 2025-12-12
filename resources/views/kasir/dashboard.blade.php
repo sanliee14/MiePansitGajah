@@ -15,21 +15,22 @@
             alt="Logo" 
             class="w-full h-full object-cover">
     </div>
-        <div>
+    <div>
         <h1 class="text-xl font-bold uppercase tracking-wide">Mie Pansit Gajah Siantar</h1>
     </div>
     <div class="hidden md:flex items-center bg-blue-200 backdrop-blur-lg px-4 py-2 rounded-full shadow-md w-64">
         <i class="fas fa-search text-white/90 mr-2 text-lg"></i>
         <input type="text" placeholder="Cari menu…" class="bg-transparent placeholder-white/80 text-white focus:outline-none w-full text-sm">
     </div>
-    <a href="{{ url('/kasir/login') }}" class="ml-auto bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition">
-    Logout
+    <a href="{{ route('logout') }}" class="ml-auto bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition">
+        Logout
     </a>
 </header>
 
 <!-- SIDEBAR -->
-<aside class="fixed top-10 left-0 h-full w-32 bg-blue-500 shadow-lg flex flex-col items-center py-6 gap-6 z-40">
+<aside class="fixed top-[80px] left-0 h-full w-32 bg-blue-500 shadow-lg flex flex-col items-center py-6 gap-6 z-40">
 
+  
     <!-- Dashboard -->
     <div class="flex flex-col items-center gap-2">
         <a href="{{ url('/kasir/dashboard') }}" 
@@ -110,22 +111,56 @@
             <p id="cart-total" class="text-lg font-bold text-gray-800">Rp0</p>
         </div>
     </div>
-    <a href="{{ route('customer.checkout') }}" class="bg-blue-500 hover:bg-blue-400 text-white font-semibold px-6 py-2 rounded-full shadow transition">Checkout</a>
+    {{-- Checkout versi kasir: ke form Nama & Meja --}}
+    <a href="{{ route('kasir.data') }}" class="bg-blue-500 hover:bg-blue-400 text-white font-semibold px-6 py-2 rounded-full shadow transition">
+        Checkout
+    </a>
 </div>
 
 <script src="https://kit.fontawesome.com/a2e0a6c5f6.js" crossorigin="anonymous"></script>
 <script>
-let cartCount = 0;
-let cartTotal = 0;
-document.querySelectorAll('.add-to-cart').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const price = parseInt(btn.dataset.price);
-        cartCount++;
-        cartTotal += price;
-        document.getElementById('cart-count').innerText = cartCount;
-        document.getElementById('cart-total').innerText = 'Rp' + cartTotal.toLocaleString('id-ID');
+    
+    document.querySelectorAll('.add-to-cart').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.dataset.id;
+            const name = btn.dataset.name;
+            const price = btn.dataset.price;
+
+            fetch("{{ route('customer.cart') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: id,
+                    name: name,
+                    price: price
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                // update tampilan jumlah & total
+                document.getElementById('cart-count').innerText = data.count;
+                document.getElementById('cart-total').innerText =
+                    'Rp' + Number(data.total).toLocaleString('id-ID');
+            })
+            .catch(err => {
+                console.error('Error cart:', err);
+            });
+        });
     });
-});
+
+    // --- ANTI BACK ---
+    window.addEventListener("pageshow", function(event) {
+        var historyTraversal = event.persisted || 
+                               (typeof window.performance != "undefined" && 
+                                window.performance.navigation.type === 2);
+        if (historyTraversal) {
+            window.location.reload();
+        }
+    });
 </script>
 </body>
 </html>

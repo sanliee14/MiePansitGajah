@@ -48,5 +48,21 @@
         © {{ date('Y') }} Mie Pansit Gajah Siantar. Semua hak dilindungi.
     </p>
 
+    @if(session('error'))
+    <div style="color: red; background-color: #ffcccc; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center;">
+        {{ session('error') }}
+    </div>
+@endif
+
+@if ($errors->any())
+    <div style="color: red; margin-bottom: 15px; text-align: center;">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 </body>
 </html>

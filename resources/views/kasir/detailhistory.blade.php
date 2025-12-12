@@ -76,7 +76,7 @@
         <p><span class="font-semibold">Catatan :</span> {{ $cart->Catatan ?? '-' }}</p>
         <p><span class="font-semibold">Waktu Selesai :</span> {{ $cart->Waktu_Bayar }}</p>
         <p><span class="font-semibold">Metode :</span> {{ $cart->Metode }}</p>
-        <p><span class="font-semibold">Kasir :</span> {{ $kasir->Nama ?? '—' }}</p>
+        <p><span class="font-semibold">Kasir :</span> {{ $cart->NamaKasir ?? '-' }}</p>
 
                 <p class="sm:col-span-2 font-bold text-blue-700 text-xl mt-2">
                     Total Harga : Rp{{ number_format($cart->Jumlah_Bayar, 0, ',', '.') }}

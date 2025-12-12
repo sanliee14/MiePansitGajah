@@ -83,16 +83,23 @@
                   <td class="py-3 px-4">{{ $k->Username }}</td>
                   <td class="py-3 px-4">{{ $k->Password }}</td>
 
-                  <td class="py-3 px-4">
-                    <form action="{{ route('owner.deletekasir', $k->Id_User) }}" method="POST"
-                        onsubmit="return confirm('Yakin ingin menghapus kasir ini?');">
-                      @csrf
-                      @method('DELETE')
-                      <button class="bg-red-500 text-white text-sm px-3 py-1 rounded-full hover:bg-red-600 transition">
-                        Hapus
-                      </button>
-                    </form>
-                  </td>
+            <td class="py-3 px-4 flex items-center gap-2">
+              
+              <a href="{{ route('owner.editkasir', $k->Id_User) }}" 
+                class="bg-yellow-400 text-white text-sm px-3 py-1 rounded-full hover:bg-yellow-500 transition shadow">
+                Edit / Reset
+              </a>
+
+              <form action="{{ route('owner.deletekasir', $k->Id_User) }}" method="POST"
+                  onsubmit="return confirm('Yakin ingin menghapus kasir ini?');">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit" class="bg-red-500 text-white text-sm px-3 py-1 rounded-full hover:bg-red-600 transition shadow">
+                      Hapus
+                  </button>
+              </form>
+
+          </td>
                 </tr>
                 @empty
                 <tr>
