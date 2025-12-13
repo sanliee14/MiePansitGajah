@@ -57,19 +57,19 @@ class KasirController extends Controller
         $product = DB::table('product')->get();
         return view('kasir.dashboard', compact('product'));
     }
+
     public function searchProduct(Request $request)
-{
-    $keyword = $request->input('q');
+    {
+        $keyword = $request->input('q');
 
-    $product = DB::table('product')
-        ->where('Nama_Product', 'LIKE', "%{$keyword}%")
-        ->orWhere('Harga', 'LIKE', "%{$keyword}%")
-        ->orderBy('Id_Product', 'desc')
-        ->get();
+        $product = DB::table('product')
+            ->where('Nama_Product', 'LIKE', "%{$keyword}%")
+            ->orWhere('Harga', 'LIKE', "%{$keyword}%")
+            ->orderBy('Id_Product', 'desc')
+            ->get();
 
-    return view('kasir.dashboard', compact('product', 'keyword'));
-}
-
+        return view('kasir.dashboard', compact('product', 'keyword'));
+    }
 
     public function payment()
     {
@@ -184,7 +184,7 @@ class KasirController extends Controller
                 'payment.Jumlah_Bayar',
                 'payment.Status'
             )
-            ->where('payment.Status', 'diproses') 
+            ->where('payment.Status', 'diproses')
             ->orderBy('cart.Id_Cart', 'desc')
             ->get();
 
@@ -233,7 +233,7 @@ class KasirController extends Controller
 
         if (!$cart) {
             return redirect()->route('kasir.prosespesanan')
-            ->with('error', 'Pesanan tidak ditemukan.');
+                ->with('error', 'Pesanan tidak ditemukan.');
         }
 
         $detail = DB::table('detail_cart')
@@ -272,13 +272,15 @@ class KasirController extends Controller
             ->where('Id_Cart', $id)
             ->update([
                 'Status' => 'selesai',
-                'Id_Kasir' => $idKasirAsli, 
+                'Id_Kasir' => $idKasirAsli,
                 'updated_at' => now()
             ]);
 
-    return redirect()->route('kasir.prosespesanan')
-        ->with('success', 'Pesanan telah selesai.');
-}
+        return redirect()->route('kasir.prosespesanan')
+            ->with('success', 'Pesanan telah selesai.');
+    }
+
+    
     public function history(Request $request)
     {
         // 1. Ambil ID User yang sedang login
@@ -292,6 +294,7 @@ class KasirController extends Controller
         }
 
         $tanggal = $request->tanggal;
+        $search  = $request->search;
 
         $order = DB::table('cart')
             ->join('payment', 'cart.Id_Cart', '=', 'payment.Id_Cart')
@@ -306,6 +309,12 @@ class KasirController extends Controller
             ->where('payment.Id_Kasir', $kasir->Id_Kasir) // Hanya ambil yang Id_Kasir-nya sama dengan yang login
             // ------------------------------
             ->where('cart.Status', 'selesai')
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($qq) use ($search) {
+                    $qq->where('cart.Nama', 'like', "%{$search}%")
+                       ->orWhere('cart.Id_Cart', 'like', "%{$search}%");
+                });
+            })
             ->when($tanggal, function ($q) use ($tanggal) {
                 return $q->whereDate('payment.Waktu_Bayar', $tanggal);
             })
@@ -329,7 +338,7 @@ class KasirController extends Controller
                 'payment.Metode',
                 'payment.Waktu_Bayar',
                 'payment.Id_Kasir',
-                'kasir.Nama_Kasir as NamaKasir' 
+                'kasir.Nama_Kasir as NamaKasir'
             )
             ->where('cart.Id_Cart', $id)
             ->first();
@@ -357,30 +366,24 @@ class KasirController extends Controller
         return view('kasir.transaksi');
     }
 
-public function tambahproduct(Request $request)
+    public function tambahproduct(Request $request)
     {
-        // 1. Validasi Input (Harus SAMA PERSIS dengan name="..." di file blade)
         $request->validate([
-            'Nama_Product' => 'required',        // Sesuai name="Nama_Product"
-            'Harga'        => 'required|numeric', // Sesuai name="Harga"
-            'kategori'     => 'required',        // Sesuai name="kategori" (ini sudah benar huruf kecil)
-            'Deskripsi'    => 'required',        // Sesuai name="Deskripsi"
-            'Image'        => 'required|image|mimes:jpeg,png,jpg|max:2048', // Sesuai name="Image"
-            
-            // Catatan: Saya hapus validasi 'stok' karena tidak ada inputnya di form blade kamu.
+            'Nama_Product' => 'required',
+            'Harga'        => 'required|numeric',
+            'kategori'     => 'required',
+            'Deskripsi'    => 'required',
+            'Image'        => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // 2. Proses Upload Gambar
-        // Gunakan 'Image' (Huruf besar I) karena itu nama inputnya
         $imageName = time() . '.' . $request->Image->getClientOriginalExtension();
         $request->Image->move(public_path('product'), $imageName);
 
-        // 3. Simpan ke Database
         DB::table('product')->insert([
-            'Nama_Product' => $request->Nama_Product, 
-            'Harga'        => $request->Harga,                            
+            'Nama_Product' => $request->Nama_Product,
+            'Harga'        => $request->Harga,
             'Kategori'     => $request->kategori,
-            'Deskripsi'    => $request->Deskripsi,    
+            'Deskripsi'    => $request->Deskripsi,
             'Image'        => $imageName,
         ]);
 

@@ -18,17 +18,27 @@
     <div>
         <h1 class="text-xl font-bold uppercase tracking-wide">Mie Pansit Gajah Siantar</h1>
     </div>
-    <div class="hidden md:flex items-center bg-blue-200 backdrop-blur-lg px-4 py-2 rounded-full shadow-md w-64">
+
+ {{--  SEARCH PRODUK KASIR --}}
+    <form action="{{ route('kasir.searchProduct') }}" method="GET"
+          class="hidden md:flex items-center bg-blue-200 backdrop-blur-lg px-4 py-2 rounded-full shadow-md w-64">
         <i class="fas fa-search text-white/90 mr-2 text-lg"></i>
-        <input type="text" placeholder="Cari menu…" class="bg-transparent placeholder-white/80 text-white focus:outline-none w-full text-sm">
-    </div>
+        <input
+            type="text"
+            name="q"
+            value="{{ request('q') }}"
+            placeholder="Cari menu…"
+            class="bg-transparent placeholder-white/80 text-white focus:outline-none w-full text-sm"
+        >
+    </form>
+
     <a href="{{ route('logout') }}" class="ml-auto bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition">
         Logout
     </a>
 </header>
 
 <!-- SIDEBAR -->
-<aside class="fixed top-10 left-0 h-full w-32 bg-blue-500 shadow-lg flex flex-col items-center py-6 gap-6 z-40">
+<aside class="fixed top-[80px] left-0 h-full w-32 bg-blue-500 shadow-lg flex flex-col items-center py-6 gap-6 z-40">
 
     <!-- Dashboard -->
     <div class="flex flex-col items-center gap-2">
