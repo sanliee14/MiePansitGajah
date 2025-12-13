@@ -208,11 +208,7 @@ class CustomerController extends Controller
         return redirect()->route('customer.checkout');
     }
 
-    /**
-     * BAYAR – dipakai customer & kasir.
-     * Kasir (cash) -> langsung ke kasir.accpesanan
-     * Customer (cash) -> ke customer.proses
-     */
+
     public function bayar(Request $request)
     {
         $payment = $request->payment_method; // cash, qris, dll

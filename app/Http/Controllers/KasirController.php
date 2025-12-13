@@ -193,15 +193,27 @@ class KasirController extends Controller
 
     public function terimapesanan($id)
     {
+        // 1. Ambil ID User yang sedang login (Kasir)
+        $idUser = auth()->user()->Id_User;
+        
+        // 2. Cari data Kasir berdasarkan User ID tersebut
+        $kasir = DB::table('kasir')->where('Id_User', $idUser)->first();
+
+        // Cek validasi 
+        if (!$kasir) {
+            return back()->with('error', 'Data kasir tidak ditemukan.');
+        }
+
+        // 3. Update Status DAN Id_Kasir ke tabel payment
         DB::table('payment')
             ->where('Id_Cart', $id)
             ->update([
-                'Status' => 'diproses'
+                'Status' => 'diproses',
+                'Id_Kasir' => $kasir->Id_Kasir 
             ]);
 
         return redirect()->route('kasir.prosespesanan');
     }
-
     public function detailproses($id)
     {
         $cart = DB::table('cart')
@@ -269,6 +281,16 @@ class KasirController extends Controller
 }
     public function history(Request $request)
     {
+        // 1. Ambil ID User yang sedang login
+        $userId = auth()->user()->Id_User;
+
+        // 2. Cari data Kasir berdasarkan ID User tersebut
+        $kasir = DB::table('kasir')->where('Id_User', $userId)->first();
+
+        if (!$kasir) {
+            return back()->with('error', 'Data kasir tidak ditemukan untuk akun ini.');
+        }
+
         $tanggal = $request->tanggal;
 
         $order = DB::table('cart')
@@ -281,6 +303,8 @@ class KasirController extends Controller
                 'payment.Jumlah_Bayar',
                 'payment.Waktu_Bayar'
             )
+            ->where('payment.Id_Kasir', $kasir->Id_Kasir) // Hanya ambil yang Id_Kasir-nya sama dengan yang login
+            // ------------------------------
             ->where('cart.Status', 'selesai')
             ->when($tanggal, function ($q) use ($tanggal) {
                 return $q->whereDate('payment.Waktu_Bayar', $tanggal);
@@ -290,7 +314,6 @@ class KasirController extends Controller
 
         return view('kasir.history', compact('order'));
     }
-
     public function detailhistory($id)
     {
         $cart = DB::table('cart')
