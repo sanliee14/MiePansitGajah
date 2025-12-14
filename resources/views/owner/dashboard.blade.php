@@ -24,13 +24,10 @@
     <div>
     <h1 class="text-xl font-bold uppercase tracking-wide">Mie Pansit Gajah Siantar</h1>
     </div>
-    <button class="ml-auto bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition-all duration-200">
-      Logout
 <a href="{{ route('owner.logout') }}" 
    class="ml-auto bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition-all duration-200 text-center">
    Logout
 </a>
-    </button>
   </nav>
 </header>
 

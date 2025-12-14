@@ -40,6 +40,7 @@
 <!-- SIDEBAR -->
 <aside class="fixed top-[80px] left-0 h-full w-32 bg-blue-500 shadow-lg flex flex-col items-center py-6 gap-6 z-40">
 
+  
     <!-- Dashboard -->
     <div class="flex flex-col items-center gap-2">
         <a href="{{ url('/kasir/dashboard') }}" 

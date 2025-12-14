@@ -280,7 +280,6 @@ class KasirController extends Controller
             ->with('success', 'Pesanan telah selesai.');
     }
 
-    
     public function history(Request $request)
     {
         // 1. Ambil ID User yang sedang login
@@ -387,7 +386,7 @@ class KasirController extends Controller
             'Image'        => $imageName,
         ]);
 
-        return redirect()->route('kasir.showtambahproduct')
+        return redirect()->route('kasir.dashboard')
             ->with('success', 'Produk berhasil ditambahkan.');
     }
 }
