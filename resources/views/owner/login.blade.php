@@ -38,9 +38,9 @@
         </form>
 
      <!-- lupa pass -->
-        <p class="text-sm text-gray-700 mt-4">
+        <!-- <p class="text-sm text-gray-700 mt-4">
             Lupa password? <a href="#" class="text-blue-700 hover:underline">Hubungi Owner</a>
-        </p>
+        </p> -->
     </div>
 
     <p class="absolute bottom-8 text-xs text-gray-800">
